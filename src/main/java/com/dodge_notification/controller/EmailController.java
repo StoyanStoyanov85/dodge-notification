@@ -1,12 +1,15 @@
 package com.dodge_notification.controller;
 
+import com.dodge_notification.dto.DtoMapper;
 import com.dodge_notification.dto.NotificationRequest;
+import com.dodge_notification.dto.NotificationResponse;
 import com.dodge_notification.model.Notification;
 import com.dodge_notification.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -29,6 +32,12 @@ public class EmailController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @GetMapping("/status")
+    public ResponseEntity<List<NotificationResponse>> checkStatus() {
+        List<NotificationResponse> status = emailService.getAllStatuses().stream().map(DtoMapper::fromNotification).toList();
+        return ResponseEntity.ok(status);
     }
 
     @DeleteMapping

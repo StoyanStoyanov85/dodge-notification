@@ -66,6 +66,10 @@ public class EmailService {
         return notificationRepository.save(notification);
     }
 
+    public List<Notification> getAllStatuses() {
+        return notificationRepository.findAllByDeletedFalse();
+    }
+
 
     public List<Notification> getNotificationUser(UUID userId) {
         return notificationRepository.findAllByUserIdAndDeletedIsFalse(userId);

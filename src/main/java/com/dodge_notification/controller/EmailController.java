@@ -1,0 +1,33 @@
+package com.dodge_notification.controller;
+
+import com.dodge_notification.dto.NotificationRequest;
+import com.dodge_notification.model.Notification;
+import com.dodge_notification.service.EmailService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+
+@RestController
+@RequestMapping("/api/emails")
+public class EmailController {
+
+    private final EmailService emailService;
+
+    @Autowired
+    public EmailController(EmailService emailService) {
+        this.emailService = emailService;
+    }
+
+    @PostMapping("/notifyAdvanced")
+    public ResponseEntity<String> sendNotificationEmail(@RequestBody NotificationRequest request) {
+        try {
+            Notification notification = emailService.sendNotificationEmail(request);
+            return ResponseEntity.ok("Notification status: " + notification.getStatus());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+
+}

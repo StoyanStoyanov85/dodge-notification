@@ -13,6 +13,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -63,6 +64,21 @@ public class EmailService {
         }
 
         return notificationRepository.save(notification);
+    }
+
+
+    public List<Notification> getNotificationUser(UUID userId) {
+        return notificationRepository.findAllByUserIdAndDeletedIsFalse(userId);
+    }
+
+
+    public void clearNotifications(UUID userId) {
+        List<Notification> notifications = getNotificationUser(userId);
+
+        for (Notification notification : notifications) {
+            notification.setDeleted(true);
+        }
+        notificationRepository.saveAll(notifications);
     }
 
 

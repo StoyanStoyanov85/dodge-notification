@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 
 @RestController
 @RequestMapping("/api/emails")
@@ -29,5 +31,9 @@ public class EmailController {
         }
     }
 
-
+    @DeleteMapping
+    public ResponseEntity<Void> clearNotificationUser(@RequestParam(name = "userId") UUID userId) {
+        emailService.clearNotifications(userId);
+        return ResponseEntity.ok().body(null);
+    }
 }
